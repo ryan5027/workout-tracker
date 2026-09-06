@@ -43,12 +43,107 @@ const seed = {
   },
   completedWorkouts: [],
   nextWorkoutId: "A",
-  activeWorkout: null
+  activeWorkout: null,
+  settings: { defaultRestSeconds: 90 },
+  homeGenerator: {
+    location: "garage",
+    duration: 30,
+    style: "mixed",
+    equipment: {
+      garage: ["bodyweight"],
+      basement: ["bodyweight"]
+    },
+    generated: null
+  }
 };
 
 let state = loadState();
+if(!state.settings) state.settings = { defaultRestSeconds: 90 };
+if(!state.settings.defaultRestSeconds) state.settings.defaultRestSeconds = 90;
+if(!state.homeGenerator){
+  state.homeGenerator = {
+    location: "garage",
+    duration: 30,
+    style: "mixed",
+    equipment: { garage:["bodyweight"], basement:["bodyweight"] },
+    generated: null
+  };
+}
+if(!state.homeGenerator.equipment) state.homeGenerator.equipment = {garage:["bodyweight"], basement:["bodyweight"]};
+if(!state.homeGenerator.equipment.garage) state.homeGenerator.equipment.garage = ["bodyweight"];
+if(!state.homeGenerator.equipment.basement) state.homeGenerator.equipment.basement = ["bodyweight"];
+save();
 let view = "home";
 let modal = null;
+let timer = {
+  selectedSeconds: state.settings.defaultRestSeconds,
+  remaining: state.settings.defaultRestSeconds,
+  running: false,
+  endAt: null,
+  intervalId: null,
+  alertFired: false
+};
+let audioContext = null;
+
+const HOME_EQUIPMENT = [
+  ["bodyweight","Bodyweight"],
+  ["dumbbells","Dumbbells"],
+  ["bench","Bench"],
+  ["bands","Resistance bands"],
+  ["pullup","Pull-up bar"],
+  ["kettlebell","Kettlebell"],
+  ["barbell","Barbell"],
+  ["rack","Rack / squat stands"],
+  ["cable","Cable / pulley"],
+  ["box","Box / step"],
+  ["cardio","Bike / treadmill / rower"]
+];
+
+const HOME_EXERCISES = [
+  {name:"Push-Up", eq:["bodyweight"], pattern:"push", modes:["strength","mixed","conditioning"], reps:"8–15"},
+  {name:"Feet-Elevated Push-Up", eq:["bodyweight","bench"], pattern:"push", modes:["strength","mixed"], reps:"6–12"},
+  {name:"Dumbbell Floor Press", eq:["dumbbells"], pattern:"push", modes:["strength","mixed"], reps:"8–12"},
+  {name:"Dumbbell Bench Press", eq:["dumbbells","bench"], pattern:"push", modes:["strength","mixed"], reps:"8–12"},
+  {name:"Dumbbell Shoulder Press", eq:["dumbbells"], pattern:"push", modes:["strength","mixed"], reps:"8–12"},
+  {name:"Band Chest Press", eq:["bands"], pattern:"push", modes:["strength","mixed"], reps:"10–15"},
+
+  {name:"One-Arm Dumbbell Row", eq:["dumbbells"], pattern:"pull", modes:["strength","mixed"], reps:"8–12/side"},
+  {name:"Bench-Supported Dumbbell Row", eq:["dumbbells","bench"], pattern:"pull", modes:["strength","mixed"], reps:"8–12"},
+  {name:"Pull-Up / Assisted Pull-Up", eq:["pullup"], pattern:"pull", modes:["strength","mixed"], reps:"5–10"},
+  {name:"Band Row", eq:["bands"], pattern:"pull", modes:["strength","mixed","conditioning"], reps:"10–15"},
+  {name:"Cable Row", eq:["cable"], pattern:"pull", modes:["strength","mixed"], reps:"8–12"},
+
+  {name:"Goblet Squat", eq:["dumbbells"], pattern:"squat", modes:["strength","mixed"], reps:"8–15"},
+  {name:"Kettlebell Goblet Squat", eq:["kettlebell"], pattern:"squat", modes:["strength","mixed"], reps:"8–15"},
+  {name:"Bodyweight Squat", eq:["bodyweight"], pattern:"squat", modes:["mixed","conditioning"], reps:"15–25"},
+  {name:"Split Squat", eq:["bodyweight"], pattern:"squat", modes:["strength","mixed"], reps:"8–12/side"},
+  {name:"Rear-Foot-Elevated Split Squat", eq:["bodyweight","bench"], pattern:"squat", modes:["strength","mixed"], reps:"8–12/side"},
+  {name:"Barbell Back Squat", eq:["barbell","rack"], pattern:"squat", modes:["strength"], reps:"5–8"},
+
+  {name:"Dumbbell Romanian Deadlift", eq:["dumbbells"], pattern:"hinge", modes:["strength","mixed"], reps:"8–12"},
+  {name:"Kettlebell Romanian Deadlift", eq:["kettlebell"], pattern:"hinge", modes:["strength","mixed"], reps:"8–12"},
+  {name:"Barbell Romanian Deadlift", eq:["barbell"], pattern:"hinge", modes:["strength"], reps:"6–10"},
+  {name:"Glute Bridge", eq:["bodyweight"], pattern:"hinge", modes:["strength","mixed","conditioning"], reps:"12–20"},
+  {name:"Kettlebell Swing", eq:["kettlebell"], pattern:"hinge", modes:["mixed","conditioning"], reps:"15–20"},
+
+  {name:"Dumbbell Curl", eq:["dumbbells"], pattern:"arms", modes:["strength","mixed"], reps:"10–15"},
+  {name:"Band Curl", eq:["bands"], pattern:"arms", modes:["strength","mixed"], reps:"12–20"},
+  {name:"Dumbbell Overhead Triceps Extension", eq:["dumbbells"], pattern:"arms", modes:["strength","mixed"], reps:"10–15"},
+  {name:"Band Pressdown", eq:["bands"], pattern:"arms", modes:["strength","mixed"], reps:"12–20"},
+  {name:"Dumbbell Lateral Raise", eq:["dumbbells"], pattern:"accessory", modes:["strength","mixed"], reps:"12–20"},
+
+  {name:"Plank", eq:["bodyweight"], pattern:"core", modes:["strength","mixed","conditioning"], reps:"30–60 sec"},
+  {name:"Dead Bug", eq:["bodyweight"], pattern:"core", modes:["strength","mixed"], reps:"8–12/side"},
+  {name:"Mountain Climber", eq:["bodyweight"], pattern:"core", modes:["conditioning","mixed"], reps:"30–45 sec"},
+  {name:"Suitcase Carry", eq:["dumbbells"], pattern:"core", modes:["strength","mixed"], reps:"30–45 sec/side"},
+  {name:"Kettlebell Suitcase Carry", eq:["kettlebell"], pattern:"core", modes:["strength","mixed"], reps:"30–45 sec/side"},
+
+  {name:"Step-Up", eq:["bodyweight","box"], pattern:"conditioning", modes:["conditioning","mixed"], reps:"10–15/side"},
+  {name:"Fast Bodyweight Squat", eq:["bodyweight"], pattern:"conditioning", modes:["conditioning"], reps:"30–40 sec"},
+  {name:"Reverse Lunge", eq:["bodyweight"], pattern:"conditioning", modes:["conditioning","mixed"], reps:"10–12/side"},
+  {name:"Low-Impact Burpee", eq:["bodyweight"], pattern:"conditioning", modes:["conditioning"], reps:"30–40 sec"},
+  {name:"Cardio Machine Push", eq:["cardio"], pattern:"conditioning", modes:["conditioning","mixed"], reps:"60–90 sec"}
+];
 
 function loadState(){
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -110,7 +205,14 @@ function updateSet(exId, idx, key, value){
 }
 function toggleDone(exId, idx){
   const ex = state.activeWorkout.exercises.find(e=>e.exerciseId===exId);
-  ex.sets[idx].done=!ex.sets[idx].done; save(); render();
+  const becomingDone = !ex.sets[idx].done;
+  ex.sets[idx].done = becomingDone;
+  save();
+  render();
+  if(becomingDone){
+    initAudio();
+    startTimer(state.settings.defaultRestSeconds);
+  }
 }
 function useSuggestion(exId){
   const ex = state.activeWorkout.exercises.find(e=>e.exerciseId===exId);
@@ -137,6 +239,7 @@ function finishWorkout(){
   });
   state.nextWorkoutId = nextAfter(a.workoutId);
   state.activeWorkout = null;
+  stopTimer(false);
   save(); view="home"; modal={type:"complete", workoutName:a.workoutName}; render();
 }
 function cancelWorkout(){
@@ -144,7 +247,250 @@ function cancelWorkout(){
     state.activeWorkout=null; save(); view="home"; render();
   }
 }
-function nav(v){ view=v; modal=null; render(); }
+function nav(v){ view=v; modal=null; render(); updateTimerDisplays(); }
+
+function homeEquipmentAvailable(ex, selected){
+  return ex.eq.every(req => selected.includes(req));
+}
+function shuffle(arr){
+  const copy = [...arr];
+  for(let i=copy.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]] = [copy[j],copy[i]];
+  }
+  return copy;
+}
+function pickExercise(pool, pattern, used){
+  const choices = shuffle(pool.filter(e=>e.pattern===pattern && !used.has(e.name)));
+  if(!choices.length) return null;
+  const picked = choices[0];
+  used.add(picked.name);
+  return picked;
+}
+function buildHomeWorkout(){
+  const g = state.homeGenerator;
+  const selected = g.equipment[g.location] || [];
+  const pool = HOME_EXERCISES.filter(ex =>
+    ex.modes.includes(g.style) &&
+    homeEquipmentAvailable(ex, selected)
+  );
+
+  if(pool.length < 3){
+    alert("Select a little more equipment for this location, or include Bodyweight.");
+    return;
+  }
+
+  const used = new Set();
+  let chosen = [];
+  if(g.style === "strength"){
+    ["squat","hinge","push","pull","core"].forEach(p=>{
+      const ex = pickExercise(pool,p,used); if(ex) chosen.push(ex);
+    });
+    if(g.duration >= 45){
+      const extra = pickExercise(pool,"arms",used) || pickExercise(pool,"accessory",used);
+      if(extra) chosen.push(extra);
+    }
+  } else if(g.style === "conditioning"){
+    ["conditioning","squat","push","hinge","core","conditioning"].forEach(p=>{
+      const ex = pickExercise(pool,p,used); if(ex) chosen.push(ex);
+    });
+    if(chosen.length < 5){
+      chosen = shuffle(pool).slice(0,Math.min(6,pool.length));
+    }
+  } else {
+    ["squat","push","pull","hinge","core"].forEach(p=>{
+      const ex = pickExercise(pool,p,used); if(ex) chosen.push(ex);
+    });
+    const finisher = pickExercise(pool,"conditioning",used);
+    if(finisher) chosen.push(finisher);
+  }
+
+  const targetCount = g.duration===20 ? 4 : (g.duration===30 ? 5 : 6);
+  if(chosen.length > targetCount) chosen = chosen.slice(0,targetCount);
+  while(chosen.length < targetCount){
+    const extra = shuffle(pool.filter(e=>!used.has(e.name)))[0];
+    if(!extra) break;
+    used.add(extra.name); chosen.push(extra);
+  }
+
+  const rounds = g.duration===20 ? 2 : 3;
+  const plan = chosen.map((ex,idx)=>{
+    let prescription;
+    if(g.style==="conditioning"){
+      prescription = `${rounds} rounds · ${ex.reps}`;
+    } else if(g.style==="mixed" && idx===chosen.length-1 && ex.pattern==="conditioning"){
+      prescription = `Finisher · 4 rounds · ${ex.reps}`;
+    } else {
+      prescription = `${rounds} sets · ${ex.reps}`;
+    }
+    return {name:ex.name, pattern:ex.pattern, prescription};
+  });
+
+  g.generated = {
+    id: Date.now(),
+    createdAt: new Date().toISOString(),
+    location:g.location,
+    duration:g.duration,
+    style:g.style,
+    exercises:plan
+  };
+  save(); render();
+}
+function setHomeLocation(loc){
+  state.homeGenerator.location = loc; save(); render();
+}
+function setHomeDuration(min){
+  state.homeGenerator.duration = Number(min); save(); render();
+}
+function setHomeStyle(style){
+  state.homeGenerator.style = style; save(); render();
+}
+function toggleHomeEquipment(location, key){
+  const list = state.homeGenerator.equipment[location] || [];
+  const ix = list.indexOf(key);
+  if(ix>=0) list.splice(ix,1); else list.push(key);
+  state.homeGenerator.equipment[location] = list;
+  state.homeGenerator.generated = null;
+  save(); render();
+}
+function clearGeneratedHomeWorkout(){
+  state.homeGenerator.generated = null; save(); render();
+}
+
+function formatTime(sec){
+  const safe = Math.max(0, Math.round(Number(sec) || 0));
+  const m = Math.floor(safe / 60);
+  const ss = safe % 60;
+  return `${String(m).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+}
+function initAudio(){
+  try {
+    if(!audioContext){
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if(Ctx) audioContext = new Ctx();
+    }
+    if(audioContext?.state === "suspended") audioContext.resume();
+  } catch {}
+}
+function timerAlert(){
+  try {
+    initAudio();
+    if(audioContext){
+      [0,0.18,0.36].forEach(delay=>{
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.0001, audioContext.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.16, audioContext.currentTime + delay + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + delay + 0.12);
+        osc.connect(gain); gain.connect(audioContext.destination);
+        osc.start(audioContext.currentTime + delay);
+        osc.stop(audioContext.currentTime + delay + 0.14);
+      });
+    }
+  } catch {}
+  try { if(navigator.vibrate) navigator.vibrate([180,100,180,100,260]); } catch {}
+}
+function ensureTimerTicker(){
+  if(timer.intervalId) return;
+  timer.intervalId = setInterval(()=>{
+    if(!timer.running) return;
+    timer.remaining = Math.max(0, Math.ceil((timer.endAt - Date.now()) / 1000));
+    if(timer.remaining <= 0){
+      timer.running = false;
+      if(!timer.alertFired){ timer.alertFired = true; timerAlert(); }
+    }
+    updateTimerDisplays();
+  }, 250);
+}
+function startTimer(seconds){
+  const secs = Math.max(1, Number(seconds || timer.selectedSeconds || 90));
+  timer.selectedSeconds = secs;
+  timer.remaining = secs;
+  timer.endAt = Date.now() + secs * 1000;
+  timer.running = true;
+  timer.alertFired = false;
+  ensureTimerTicker();
+  updateTimerDisplays();
+}
+function pauseResumeTimer(){
+  if(timer.running){
+    timer.remaining = Math.max(0, Math.ceil((timer.endAt - Date.now()) / 1000));
+    timer.running = false;
+  } else if(timer.remaining > 0){
+    initAudio();
+    timer.endAt = Date.now() + timer.remaining * 1000;
+    timer.running = true;
+    timer.alertFired = false;
+    ensureTimerTicker();
+  }
+  updateTimerDisplays();
+}
+function resetTimer(){
+  timer.running = false;
+  timer.alertFired = false;
+  timer.remaining = timer.selectedSeconds;
+  updateTimerDisplays();
+}
+function stopTimer(reset=true){
+  timer.running = false;
+  timer.alertFired = false;
+  if(reset) timer.remaining = timer.selectedSeconds;
+  updateTimerDisplays();
+}
+function addTimerSeconds(seconds){
+  const amount = Number(seconds) || 0;
+  if(timer.running){
+    timer.endAt += amount * 1000;
+    timer.remaining = Math.max(0, Math.ceil((timer.endAt - Date.now()) / 1000));
+    if(timer.remaining <= 0) timer.running = false;
+  } else {
+    timer.remaining = Math.max(0, timer.remaining + amount);
+  }
+  timer.alertFired = false;
+  updateTimerDisplays();
+}
+function setTimerPreset(seconds){
+  initAudio();
+  timer.selectedSeconds = Number(seconds);
+  timer.remaining = Number(seconds);
+  timer.running = false;
+  timer.alertFired = false;
+  updateTimerDisplays();
+}
+function setDefaultRest(seconds){
+  const secs = Number(seconds);
+  state.settings.defaultRestSeconds = secs;
+  save();
+  timer.selectedSeconds = secs;
+  if(!timer.running) timer.remaining = secs;
+  render();
+  updateTimerDisplays();
+}
+function timerToggle(){
+  initAudio();
+  if(timer.remaining <= 0) startTimer(timer.selectedSeconds);
+  else pauseResumeTimer();
+}
+function updateTimerDisplays(){
+  const text = formatTime(timer.remaining);
+  const big = document.getElementById("bigTimerText");
+  if(big) big.textContent = text;
+  const status = document.getElementById("bigTimerStatus");
+  if(status) status.textContent = timer.remaining === 0 ? "GO" : (timer.running ? "RESTING" : "READY");
+  const toggle = document.getElementById("timerToggle");
+  if(toggle) toggle.textContent = timer.running ? "Pause" : (timer.remaining === 0 ? "Restart" : "Start");
+  const strip = document.getElementById("restStrip");
+  if(strip){
+    const shouldShow = timer.running || timer.remaining !== timer.selectedSeconds;
+    strip.classList.toggle("hidden", !shouldShow);
+    const countdown = document.getElementById("restCountdown");
+    if(countdown) countdown.textContent = text;
+    const label = document.getElementById("restLabel");
+    if(label) label.textContent = timer.remaining === 0 ? "Start next set" : (timer.running ? "Rest" : "Paused");
+  }
+}
+
 
 function homeView(){
   const next = workoutById(state.nextWorkoutId) || state.currentBlock.workouts[0];
@@ -172,6 +518,16 @@ function homeView(){
         </div>
       </div>
       <div class="card">
+        <h3>Rest timer</h3>
+        <div class="subtle" style="margin-bottom:12px">Mark a set complete and a ${formatTime(state.settings.defaultRestSeconds)} rest countdown starts automatically.</div>
+        <button class="btn secondary" onclick="nav('timer')">Open giant timer</button>
+      </div>
+      <div class="card">
+        <h3>Garage / Basement workout</h3>
+        <div class="subtle" style="margin-bottom:12px">Generate a one-off 20, 30, or 45 minute workout without changing your A/B/C gym rotation.</div>
+        <button class="btn secondary" onclick="nav('homegen')">Generate home workout</button>
+      </div>
+      <div class="card">
         <h3>What this version remembers</h3>
         <div class="subtle">Weights and reps, exercise history, persistent equipment/setup notes, session notes, and progression suggestions.</div>
       </div>
@@ -186,6 +542,16 @@ function workoutView(){
     <div class="toprow">
       <div><div class="eyebrow">Active workout</div><h1>${state.activeWorkout.workoutName}</h1></div>
       <button class="btn ghost small" onclick="cancelWorkout()">Discard</button>
+    </div>
+  </div>
+  <div id="restStrip" class="rest-strip hidden">
+    <div>
+      <div id="restLabel" class="rest-label">Rest</div>
+      <div id="restCountdown" class="rest-countdown">${formatTime(timer.remaining)}</div>
+    </div>
+    <div class="rest-actions">
+      <button onclick="addTimerSeconds(30)">+30</button>
+      <button onclick="resetTimer()">Skip</button>
     </div>
   </div>
   <main class="content">
@@ -221,6 +587,104 @@ function workoutView(){
   </main>`;
 }
 
+function timerView(){
+  return `<div class="topbar"><div class="toprow"><div><h1>Timer</h1><div class="subtle">Maximum-size countdown for across-the-gym visibility.</div></div></div></div>
+  <main class="content">
+    <div class="timer-stage">
+      <div id="bigTimerStatus" class="timer-caption">${timer.remaining===0 ? "GO" : (timer.running ? "RESTING" : "READY")}</div>
+      <div id="bigTimerText" class="timer-digits">${formatTime(timer.remaining)}</div>
+      <div class="timer-main-actions">
+        <button id="timerToggle" class="timer-primary" onclick="timerToggle()">${timer.running ? "Pause" : (timer.remaining===0 ? "Restart" : "Start")}</button>
+        <button class="timer-secondary-button" onclick="resetTimer()">Reset</button>
+      </div>
+      <div class="timer-adjust-actions">
+        <button onclick="addTimerSeconds(-30)">−30 sec</button>
+        <button onclick="addTimerSeconds(30)">+30 sec</button>
+      </div>
+    </div>
+    <div class="timer-presets">
+      <button onclick="setTimerPreset(60)">1:00</button>
+      <button onclick="setTimerPreset(90)">1:30</button>
+      <button onclick="setTimerPreset(120)">2:00</button>
+      <button onclick="setTimerPreset(180)">3:00</button>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h3>Automatic rest after a set</h3>
+      <div class="subtle" style="margin-bottom:10px">Choose the countdown that starts when you tap the ✓ after a set.</div>
+      <select aria-label="Default rest period" style="width:100%" onchange="setDefaultRest(this.value)">
+        ${[60,90,120,180].map(sec=>`<option value="${sec}" ${sec===state.settings.defaultRestSeconds?'selected':''}>${formatTime(sec)}</option>`).join("")}
+      </select>
+    </div>
+  </main>`;
+}
+
+
+function homeGeneratorView(){
+  const g = state.homeGenerator;
+  const selected = g.equipment[g.location] || [];
+  const generated = g.generated;
+  const locationLabel = g.location==="garage" ? "Garage" : "Basement";
+  return `<div class="topbar"><div class="toprow"><div><h1>At-Home Generator</h1><div class="subtle">One-off workouts that do not alter your gym rotation.</div></div></div></div>
+  <main class="content">
+    <div class="card">
+      <div class="eyebrow">Location</div>
+      <div class="segmented">
+        <button class="${g.location==="garage"?"selected":""}" onclick="setHomeLocation('garage')">Garage</button>
+        <button class="${g.location==="basement"?"selected":""}" onclick="setHomeLocation('basement')">Basement</button>
+      </div>
+
+      <div class="eyebrow" style="margin-top:16px">Time</div>
+      <div class="segmented three">
+        ${[20,30,45].map(m=>`<button class="${g.duration===m?"selected":""}" onclick="setHomeDuration(${m})">${m} min</button>`).join("")}
+      </div>
+
+      <div class="eyebrow" style="margin-top:16px">Workout type</div>
+      <div class="segmented three">
+        ${["strength","mixed","conditioning"].map(s=>`<button class="${g.style===s?"selected":""}" onclick="setHomeStyle('${s}')">${s[0].toUpperCase()+s.slice(1)}</button>`).join("")}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row between">
+        <div>
+          <h3 style="margin-bottom:2px">${locationLabel} equipment</h3>
+          <div class="subtle">Set this once; the app remembers it.</div>
+        </div>
+        <span class="pill">${selected.length} selected</span>
+      </div>
+      <div class="equipment-grid">
+        ${HOME_EQUIPMENT.map(([key,label])=>`
+          <label class="equipment-chip ${selected.includes(key)?"on":""}">
+            <input type="checkbox" ${selected.includes(key)?"checked":""} onchange="toggleHomeEquipment('${g.location}','${key}')">
+            <span>${label}</span>
+          </label>`).join("")}
+      </div>
+    </div>
+
+    <button class="btn" style="width:100%;padding:16px" onclick="buildHomeWorkout()">${generated ? "Generate another workout" : "Generate workout"}</button>
+
+    ${generated ? `<div class="card" style="margin-top:12px">
+      <div class="row between">
+        <div>
+          <div class="eyebrow">${generated.location==="garage"?"Garage":"Basement"} · ${generated.duration} min · ${generated.style}</div>
+          <h2 style="margin-top:5px">Today's one-off workout</h2>
+        </div>
+        <button class="btn ghost small" onclick="clearGeneratedHomeWorkout()">Clear</button>
+      </div>
+      <div class="home-plan">
+        ${generated.exercises.map((ex,i)=>`<div class="home-exercise">
+          <div class="home-num">${i+1}</div>
+          <div>
+            <strong>${ex.name}</strong>
+            <div class="subtle">${ex.prescription}</div>
+          </div>
+        </div>`).join("")}
+      </div>
+      <div class="note"><strong>Tip:</strong> Use the Timer tab for rest periods or conditioning intervals. This session will not advance Workout A/B/C.</div>
+    </div>` : ""}
+  </main>`;
+}
+
 function historyView(){
   const exDefs = new Map();
   state.currentBlock.workouts.flatMap(w=>w.exercises).forEach(e=>exDefs.set(e.id,e));
@@ -249,7 +713,7 @@ function programView(){
     </div>`).join("")}
     <div class="card">
       <h3>Future block handoff</h3>
-      <div class="subtle">V1 preserves the data needed for the future planning workflow: completed sessions, exercise history, progression, and notes. AI-assisted next-block creation can be layered on later.</div>
+      <div class="subtle">This version preserves the data needed for the future planning workflow: completed sessions, exercise history, progression, and notes. AI-assisted next-block creation can be layered on later.</div>
     </div>
     <div class="card">
       <h3>Backup & settings</h3>
@@ -264,7 +728,7 @@ function settingsView(){
   <main class="content">
     <div class="card">
       <h3>Data</h3>
-      <p class="subtle">This V1 stores data only in this browser on this device.</p>
+      <p class="subtle">This app stores workout data only in this browser on this device.</p>
       <button class="btn secondary" onclick="exportData()">Export backup</button>
       <button class="btn ghost" style="margin-left:6px" onclick="document.getElementById('importFile').click()">Import backup</button>
       <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importData(this.files[0])">
@@ -327,16 +791,18 @@ function escapeHtml(v=""){ return String(v).replace(/[&<>"']/g,m=>({"&":"&amp;",
 function escapeAttr(v=""){ return escapeHtml(v); }
 
 function render(){
-  let body = view==="home" ? homeView() : view==="workout" ? workoutView() : view==="history" ? historyView() : view==="program" ? programView() : settingsView();
+  let body = view==="home" ? homeView() : view==="workout" ? workoutView() : view==="timer" ? timerView() : view==="homegen" ? homeGeneratorView() : view==="history" ? historyView() : view==="program" ? programView() : settingsView();
   document.getElementById("app").innerHTML = `<div class="shell">${body}
     <nav class="nav"><div class="navinner">
       <button class="${view==='home'?'on':''}" onclick="nav('home')">Home</button>
       <button class="${view==='workout'?'on':''}" onclick="nav('workout')">Workout</button>
+      <button class="${view==='timer'?'on':''}" onclick="nav('timer')">Timer</button>
       <button class="${view==='history'?'on':''}" onclick="nav('history')">History</button>
       <button class="${view==='program'||view==='settings'?'on':''}" onclick="nav('program')">Program</button>
     </div></nav>
     ${modalHtml()}
   </div>`;
+  updateTimerDisplays();
 }
 render();
 
