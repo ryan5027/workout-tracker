@@ -1,34 +1,26 @@
-# Workout Tracker V2 — Timer + At-Home Generator
+# Workout Tracker V3 — Strength Block + Smart Training Tools
 
-This release combines the timer update and the Garage/Basement workout generator.
+## Active program
+The already-approved **5-Week Full Body Strength Block** activates on upgrade. Existing workout history is preserved under the same local-storage key. Week 5 is a programmed deload.
 
-## New in this version
-- Automatic rest timer starts when a gym set is marked complete
-- Dedicated Timer tab with very large digits
-- 1:00, 1:30, 2:00, and 3:00 presets
-- Pause, reset, and +/- 30 second controls
-- Separate one-off At-Home Workout Generator
-- Garage and Basement equipment profiles
-- Equipment profiles are editable and stored on the device
-- Choose 20, 30, or 45 minutes
-- Choose Strength, Mixed, or Conditioning
-- Regenerate a different workout at any time
-- Generated home workouts do not advance the normal Workout A/B/C rotation
+## New gym features
+- Approved-only exercise substitutions
+- Frequently used approved substitutions rise to the top of the list
+- Substitute exercises keep separate history/PRs, while the gray suggested load still comes from the prescribed exercise
+- One optional 1–10 RPE rating per exercise
+- Per-exercise rest timers shown above the exercise that started the timer
+- Programmed supersets with a per-session **Do separately** override
+- End-of-workout summary: duration, completed working sets, PRs, progressed exercises
+- PRs for heaviest weight and best weight at a specific rep count
+- Exercise progress charts with Best Weight / Estimated 1RM toggle and time filters
+- Missed target sets hold the same load next time; complete all sets at the top of the rep range to progress
+- Deload: ~90% of last normal working load; 4 sets→3, 3→2, 2→1; deload data ignored for progression
 
-## Existing features preserved
-- Suggested next workout with manual override
-- Set-by-set weight/reps logging
-- Exercise history
-- Persistent equipment/setup notes
-- Session notes
-- Automatic next-weight suggestions
-- Local storage and JSON backup/import
+## Program updates
+`program.json` is now the remote-program channel. A future program with a higher `version` appears as **New program available**. The app shows the summary and complete workouts before approval. Approved programs activate after the current block is completed.
 
-## Data preservation
-The app continues to use the same local-storage key as V1. Replacing the GitHub Pages files with this release is intended to preserve existing history, notes, and progression data on the same browser/device.
+## Home generator
+Garage and Basement sessions are disposable and do not enter gym history. Modes: **Move**, **Condition**, **Mobility + Core**. Times: **10 / 20 / 30 / 45 min**. Garage uses the actual TRX/jump-rope/kettlebell/sandbag equipment profile. Basement emphasizes treadmill work and supports weighted-vest incline walking plus faster non-vest intervals.
 
-## Home generator setup
-The Garage and Basement profiles begin conservatively with Bodyweight selected. Open the generator and check the equipment actually available in each space. The app remembers those selections.
-
-## Current limitation
-Generated at-home sessions are one-off plans rather than full logged sessions. They intentionally stay separate from the gym progression system in this version.
+## Backup
+Manual JSON export/import remains available. V3 also contains optional automatic cloud backup with Google and email/password sign-in through Firebase. See `FIREBASE_SETUP.md` for the one-time connection steps.

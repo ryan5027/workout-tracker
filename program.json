@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 3,
+  "id": "strength-block-2026-10",
+  "version": 3,
+  "name": "5-Week Full Body Strength Block",
+  "summary": "This block shifts the emphasis toward strength while keeping enough hypertrophy work to maintain and build muscle. The three days remain full-body, the main lifts use lower rep ranges and longer rest periods, arm and shoulder accessories use time-efficient supersets, and Week 5 is a planned deload at about 90% of the most recent normal working load with reduced sets. Seated Leg Curl is standardized across Workouts A and C so it shares one exercise history.",
+  "weeks": 5,
+  "deloadWeek": 5,
+  "deloadLoadFactor": 0.9,
+  "deloadSetRule": {"4":3,"3":2,"2":1,"1":1},
+  "workouts": [
+    {
+      "id": "A",
+      "name": "Workout A — Squat + Horizontal Push/Pull",
+      "exercises": [
+        {"id":"hack-squat","name":"Hack Squat","sets":4,"minReps":5,"maxReps":7,"increment":10,"restSeconds":180,"muscles":["quads","glutes"],"substitutes":[{"id":"pendulum-squat","name":"Pendulum Squat"}]},
+        {"id":"incline-dumbbell-press","name":"Incline Dumbbell Press","sets":4,"minReps":6,"maxReps":8,"increment":5,"restSeconds":180,"muscles":["chest","triceps","shoulders"],"substitutes":[{"id":"incline-machine-press","name":"Incline Machine Press"}]},
+        {"id":"chest-supported-row","name":"Chest-Supported Row","sets":4,"minReps":6,"maxReps":8,"increment":5,"restSeconds":150,"muscles":["back","biceps"],"substitutes":[{"id":"seated-cable-row","name":"Seated Cable Row"}]},
+        {"id":"seated-leg-curl","name":"Seated Leg Curl","sets":3,"minReps":8,"maxReps":10,"increment":5,"restSeconds":120,"muscles":["hamstrings"],"substitutes":[{"id":"lying-leg-curl","name":"Lying Leg Curl"}]},
+        {"id":"lateral-raise-machine","name":"Lateral Raise Machine","sets":3,"minReps":10,"maxReps":15,"increment":5,"restSeconds":90,"muscles":["shoulders"],"substitutes":[{"id":"dumbbell-lateral-raise","name":"Dumbbell Lateral Raise"}]},
+        {"id":"dumbbell-curl","name":"Dumbbell Curl","sets":2,"minReps":8,"maxReps":12,"increment":5,"restSeconds":90,"muscles":["biceps"],"supersetGroup":"A-ARMS","supersetOrder":1,"substitutes":[{"id":"preacher-curl","name":"Preacher Curl"},{"id":"hammer-curl","name":"Hammer Curl"}]},
+        {"id":"rope-pressdown","name":"Rope Pressdown","sets":2,"minReps":8,"maxReps":12,"increment":5,"restSeconds":90,"muscles":["triceps"],"supersetGroup":"A-ARMS","supersetOrder":2,"substitutes":[{"id":"straight-bar-pressdown","name":"Straight-Bar Pressdown"}]}
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Workout B — Hinge + Vertical Push/Pull",
+      "exercises": [
+        {"id":"romanian-deadlift","name":"Romanian Deadlift","sets":4,"minReps":5,"maxReps":7,"increment":10,"restSeconds":180,"muscles":["hamstrings","glutes","back"],"substitutes":[{"id":"smith-romanian-deadlift","name":"Smith Machine Romanian Deadlift"},{"id":"dumbbell-romanian-deadlift","name":"Dumbbell Romanian Deadlift"}]},
+        {"id":"machine-shoulder-press","name":"Machine Shoulder Press","sets":4,"minReps":6,"maxReps":8,"increment":5,"restSeconds":180,"muscles":["shoulders","triceps"],"substitutes":[{"id":"dumbbell-shoulder-press","name":"Dumbbell Shoulder Press"}]},
+        {"id":"lat-pulldown","name":"Lat Pulldown","sets":4,"minReps":6,"maxReps":8,"increment":5,"restSeconds":150,"muscles":["back","biceps"],"substitutes":[{"id":"assisted-pull-up","name":"Assisted Pull-Up"},{"id":"neutral-grip-lat-pulldown","name":"Neutral-Grip Lat Pulldown"}]},
+        {"id":"bulgarian-split-squat","name":"Bulgarian Split Squat","sets":3,"minReps":6,"maxReps":8,"increment":5,"restSeconds":120,"muscles":["quads","glutes"],"substitutes":[{"id":"reverse-lunge","name":"Reverse Lunge"}]},
+        {"id":"pec-deck","name":"Pec Deck / Machine Fly","sets":3,"minReps":8,"maxReps":12,"increment":5,"restSeconds":90,"muscles":["chest"],"substitutes":[{"id":"dumbbell-fly","name":"Dumbbell Fly"}]},
+        {"id":"preacher-curl","name":"Preacher Curl","sets":2,"minReps":8,"maxReps":12,"increment":5,"restSeconds":90,"muscles":["biceps"],"supersetGroup":"B-ARMS","supersetOrder":1,"substitutes":[{"id":"dumbbell-curl","name":"Dumbbell Curl"},{"id":"hammer-curl","name":"Hammer Curl"}]},
+        {"id":"overhead-cable-triceps-extension","name":"Overhead Cable Triceps Extension","sets":2,"minReps":8,"maxReps":12,"increment":5,"restSeconds":90,"muscles":["triceps"],"supersetGroup":"B-ARMS","supersetOrder":2,"substitutes":[{"id":"overhead-dumbbell-triceps-extension","name":"Overhead Dumbbell Triceps Extension"}]}
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Workout C — Press + Pull + Secondary Legs",
+      "exercises": [
+        {"id":"machine-chest-press","name":"Machine Chest Press","sets":4,"minReps":5,"maxReps":7,"increment":5,"restSeconds":180,"muscles":["chest","triceps","shoulders"],"substitutes":[{"id":"dumbbell-bench-press","name":"Dumbbell Bench Press"}]},
+        {"id":"seated-cable-row","name":"Seated Cable Row","sets":4,"minReps":6,"maxReps":8,"increment":5,"restSeconds":150,"muscles":["back","biceps"],"substitutes":[{"id":"chest-supported-row","name":"Chest-Supported Row"}]},
+        {"id":"leg-extension","name":"Leg Extension","sets":3,"minReps":8,"maxReps":10,"increment":5,"restSeconds":120,"muscles":["quads"],"substitutes":[{"id":"single-leg-leg-extension","name":"Single-Leg Leg Extension"}]},
+        {"id":"seated-leg-curl","name":"Seated Leg Curl","sets":3,"minReps":8,"maxReps":10,"increment":5,"restSeconds":120,"muscles":["hamstrings"],"substitutes":[{"id":"lying-leg-curl","name":"Lying Leg Curl"}]},
+        {"id":"neutral-grip-lat-pulldown","name":"Neutral-Grip Lat Pulldown","sets":3,"minReps":8,"maxReps":10,"increment":5,"restSeconds":120,"muscles":["back","biceps"],"substitutes":[{"id":"lat-pulldown","name":"Lat Pulldown"},{"id":"assisted-pull-up","name":"Assisted Pull-Up"}]},
+        {"id":"lateral-raise-machine","name":"Lateral Raise Machine","sets":3,"minReps":12,"maxReps":15,"increment":5,"restSeconds":75,"muscles":["shoulders"],"supersetGroup":"C-SHOULDERS","supersetOrder":1,"substitutes":[{"id":"dumbbell-lateral-raise","name":"Dumbbell Lateral Raise"}]},
+        {"id":"rear-delt-fly","name":"Rear-Delt Fly","sets":3,"minReps":12,"maxReps":15,"increment":5,"restSeconds":75,"muscles":["shoulders","back"],"supersetGroup":"C-SHOULDERS","supersetOrder":2,"substitutes":[{"id":"face-pull","name":"Face Pull"}]}
+      ]
+    }
+  ]
+}

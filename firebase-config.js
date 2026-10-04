@@ -1,0 +1,1 @@
+window.WORKOUT_FIREBASE_CONFIG = null;
