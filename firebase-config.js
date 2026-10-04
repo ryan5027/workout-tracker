@@ -1,5 +1,5 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+window.WORKOUT_FIREBASE_CONFIG = {
   apiKey: "AIzaSyAr1-gpdyVg6Dw9HsEK2JBs0T6FubZ1Mdc",
   authDomain: "workout-tracker-ryan.firebaseapp.com",
   projectId: "workout-tracker-ryan",
