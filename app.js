@@ -37,74 +37,136 @@ const BASEMENT_INVENTORY = [
 const HOME_POOLS = {
   garage: {
     move: [
-      {name:"TRX Row", role:"pull", muscles:["back","biceps"], intensity:1, rx:"10–15 smooth reps"},
-      {name:"TRX Chest Press", role:"push", muscles:["chest","triceps"], intensity:1, rx:"8–15 controlled reps"},
-      {name:"TRX Squat", role:"lower", muscles:["quads","glutes"], intensity:1, rx:"12–20 reps"},
-      {name:"Goblet Squat — 30 or 45 lb KB", role:"lower", muscles:["quads","glutes"], intensity:2, rx:"10–15 reps"},
-      {name:"Kettlebell Deadlift — 45 or 80 lb", role:"hinge", muscles:["hamstrings","glutes"], intensity:2, rx:"10–15 reps"},
-      {name:"Suitcase Carry — 45 or 80 lb KB", role:"carry", muscles:["core","grip"], intensity:1, rx:"30–45 sec/side"},
-      {name:"Sandbag Bear-Hug Carry", role:"carry", muscles:["core","legs"], intensity:2, rx:"30–60 sec"},
-      {name:"Easy Jump Rope", role:"cardio", muscles:["calves"], intensity:1, rx:"45–75 sec"},
-      {name:"Leg Curl Roller", role:"hamstring", muscles:["hamstrings"], intensity:1, rx:"10–15 reps"},
-      {name:"Ab Roller", role:"core", muscles:["core"], intensity:2, rx:"5–10 quality reps"},
-      {name:"Pull-Up", role:"pull", muscles:["back","biceps"], intensity:2, rx:"submax set, stop 2–3 reps early"}
+      {name:"TRX Row",role:"pull",muscles:["back","biceps"],intensity:1,rx:"10–15 smooth reps"},
+      {name:"TRX High Row",role:"pull",muscles:["back","biceps"],intensity:1,rx:"10–15 reps"},
+      {name:"TRX Chest Press",role:"push",muscles:["chest","triceps"],intensity:1,rx:"8–15 controlled reps"},
+      {name:"Push-Up",role:"push",muscles:["chest","triceps"],intensity:1,rx:"8–20 reps, stop well short of failure"},
+      {name:"Close-Grip Push-Up",role:"push",muscles:["chest","triceps"],intensity:1,rx:"6–15 reps"},
+      {name:"Pike Push-Up",role:"push",muscles:["shoulders","triceps"],intensity:1,rx:"6–12 reps"},
+      {name:"TRX Squat",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"12–20 reps"},
+      {name:"TRX Reverse Lunge",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"8–12/side"},
+      {name:"TRX Assisted Split Squat",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"8–12/side"},
+      {name:"Bodyweight Split Squat",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"10–15/side"},
+      {name:"Reverse Lunge",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"8–12/side"},
+      {name:"Glute Bridge",role:"hinge",muscles:["glutes","hamstrings"],intensity:1,rx:"15–25 reps"},
+      {name:"Single-Leg Glute Bridge",role:"hinge",muscles:["glutes","hamstrings"],intensity:1,rx:"8–12/side"},
+      {name:"Goblet Squat — 30 or 45 lb KB",role:"lower",muscles:["quads","glutes"],intensity:2,rx:"10–15 reps"},
+      {name:"Kettlebell Deadlift — 45 or 80 lb",role:"hinge",muscles:["hamstrings","glutes"],intensity:2,rx:"10–15 reps"},
+      {name:"TRX Hamstring Curl",role:"hamstring",muscles:["hamstrings","glutes"],intensity:1,rx:"8–15 reps"},
+      {name:"Leg Curl Roller",role:"hamstring",muscles:["hamstrings"],intensity:1,rx:"10–15 reps"},
+      {name:"TRX Face Pull",role:"upper",muscles:["shoulders","back"],intensity:1,rx:"12–20 reps"},
+      {name:"TRX Y Raise",role:"upper",muscles:["shoulders","back"],intensity:1,rx:"8–15 reps"},
+      {name:"TRX Biceps Curl",role:"upper",muscles:["biceps"],intensity:1,rx:"10–15 reps"},
+      {name:"TRX Triceps Extension",role:"upper",muscles:["triceps"],intensity:1,rx:"10–15 reps"},
+      {name:"Suitcase Carry — 45 or 80 lb KB",role:"carry",muscles:["core","grip"],intensity:1,rx:"30–60 sec/side"},
+      {name:"Front-Rack Carry — 30 or 45 lb KB",role:"carry",muscles:["core","shoulders"],intensity:1,rx:"30–60 sec/side"},
+      {name:"Offset Farmer Carry — 30 + 45 lb KB",role:"carry",muscles:["core","grip"],intensity:1,rx:"30–45 sec, switch sides"},
+      {name:"Sandbag Bear-Hug Carry",role:"carry",muscles:["core","legs"],intensity:1,rx:"30–60 sec"},
+      {name:"Sandbag Shoulder Carry",role:"carry",muscles:["core","legs"],intensity:1,rx:"30–45 sec/side"},
+      {name:"Suitcase March in Place",role:"carry",muscles:["core","grip"],intensity:1,rx:"30–45 sec/side"},
+      {name:"Easy Jump Rope",role:"cardio",muscles:["calves"],intensity:1,rx:"45–90 sec"},
+      {name:"Dead Bug",role:"core",muscles:["core"],intensity:1,rx:"8–12/side"},
+      {name:"Bird Dog",role:"core",muscles:["core"],intensity:1,rx:"8–12/side"},
+      {name:"Side Plank",role:"core",muscles:["core"],intensity:1,rx:"20–40 sec/side"},
+      {name:"Ab Roller",role:"core",muscles:["core"],intensity:2,rx:"5–10 quality reps"},
+      {name:"Pull-Up",role:"pull",muscles:["back","biceps"],intensity:2,rx:"submax set, stop 2–3 reps early"}
     ],
     condition: [
-      {name:"Speed Jump Rope", role:"cardio", muscles:["calves"], intensity:2, rx:"45 sec work / 30 sec easy"},
-      {name:"Weighted Jump Rope", role:"cardio", muscles:["shoulders","calves"], intensity:2, rx:"30 sec work / 45 sec easy"},
-      {name:"Kettlebell Swing — 30 or 45 lb", role:"hinge", muscles:["hamstrings","glutes"], intensity:2, rx:"15–20 reps"},
-      {name:"Sandbag Bear-Hug Carry", role:"carry", muscles:["core","legs"], intensity:2, rx:"40–60 sec"},
-      {name:"Kettlebell Suitcase Carry", role:"carry", muscles:["core","grip"], intensity:2, rx:"30–45 sec/side"},
-      {name:"TRX Row", role:"pull", muscles:["back","biceps"], intensity:1, rx:"10–15 reps"},
-      {name:"Push-Up", role:"push", muscles:["chest","triceps"], intensity:1, rx:"8–15 reps"},
-      {name:"Reverse Lunge", role:"lower", muscles:["quads","glutes"], intensity:1, rx:"8–10/side"},
-      {name:"Mountain Climber", role:"core", muscles:["core"], intensity:2, rx:"30–40 sec"},
-      {name:"Ab Roller", role:"core", muscles:["core"], intensity:2, rx:"5–10 reps"}
+      {name:"Speed Jump Rope",role:"cardio",muscles:["calves"],intensity:2,rx:"45 sec work / 30 sec easy"},
+      {name:"Weighted Jump Rope",role:"cardio",muscles:["shoulders","calves"],intensity:2,rx:"30 sec work / 45 sec easy"},
+      {name:"Alternating-Foot Jump Rope",role:"cardio",muscles:["calves"],intensity:2,rx:"45–60 sec"},
+      {name:"Kettlebell Swing — 30 or 45 lb",role:"hinge",muscles:["hamstrings","glutes"],intensity:2,rx:"15–20 reps"},
+      {name:"Sandbag Bear-Hug Carry",role:"carry",muscles:["core","legs"],intensity:2,rx:"40–60 sec"},
+      {name:"Sandbag Shoulder Carry",role:"carry",muscles:["core","legs"],intensity:2,rx:"30–45 sec/side"},
+      {name:"Kettlebell Suitcase Carry",role:"carry",muscles:["core","grip"],intensity:2,rx:"30–45 sec/side"},
+      {name:"Front-Rack Carry — 30 or 45 lb KB",role:"carry",muscles:["core","shoulders"],intensity:2,rx:"30–45 sec/side"},
+      {name:"Offset Farmer Carry — 30 + 45 lb KB",role:"carry",muscles:["core","grip"],intensity:2,rx:"30–45 sec, switch sides"},
+      {name:"TRX Row",role:"pull",muscles:["back","biceps"],intensity:1,rx:"10–15 reps"},
+      {name:"TRX Chest Press",role:"push",muscles:["chest","triceps"],intensity:1,rx:"8–15 reps"},
+      {name:"TRX Mountain Climber",role:"core",muscles:["core","hips"],intensity:2,rx:"20–30 sec"},
+      {name:"Push-Up",role:"push",muscles:["chest","triceps"],intensity:1,rx:"8–15 reps"},
+      {name:"Bodyweight Squat",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"15–25 reps"},
+      {name:"Reverse Lunge",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"8–10/side"},
+      {name:"Bear Crawl",role:"full",muscles:["core","shoulders","legs"],intensity:2,rx:"20–30 sec"},
+      {name:"Mountain Climber",role:"core",muscles:["core"],intensity:2,rx:"30–40 sec"},
+      {name:"Ab Roller",role:"core",muscles:["core"],intensity:2,rx:"5–10 reps"}
     ],
     mobility: [
-      {name:"90/90 Hip Switch", role:"mobility", muscles:["hips"], intensity:1, rx:"6–8/side"},
-      {name:"TRX Assisted Deep Squat", role:"mobility", muscles:["hips","quads"], intensity:1, rx:"8–10 slow reps"},
-      {name:"TRX Fallout", role:"core", muscles:["core","shoulders"], intensity:1, rx:"6–10 reps"},
-      {name:"Ab Roller", role:"core", muscles:["core"], intensity:2, rx:"5–8 quality reps"},
-      {name:"Leg Curl Roller", role:"hamstring", muscles:["hamstrings"], intensity:1, rx:"10–15 reps"},
-      {name:"TRX Y Raise", role:"upper", muscles:["shoulders","back"], intensity:1, rx:"8–12 reps"},
-      {name:"Split Squat Iso Hold", role:"lower", muscles:["quads","glutes"], intensity:1, rx:"20–30 sec/side"},
-      {name:"Dead Bug", role:"core", muscles:["core"], intensity:1, rx:"8–10/side"},
-      {name:"Easy Suitcase Carry — 30 or 45 lb KB", role:"carry", muscles:["core","grip"], intensity:1, rx:"30–45 sec/side"}
+      {name:"90/90 Hip Switch",role:"mobility",muscles:["hips"],intensity:1,rx:"6–8/side"},
+      {name:"World's Greatest Stretch",role:"mobility",muscles:["hips","back"],intensity:1,rx:"4–6/side"},
+      {name:"TRX Assisted Deep Squat",role:"mobility",muscles:["hips","quads"],intensity:1,rx:"8–10 slow reps"},
+      {name:"TRX Assisted Reverse Lunge",role:"mobility",muscles:["hips","quads"],intensity:1,rx:"6–10/side"},
+      {name:"TRX Fallout",role:"core",muscles:["core","shoulders"],intensity:1,rx:"6–10 reps"},
+      {name:"TRX Body Saw",role:"core",muscles:["core","shoulders"],intensity:1,rx:"8–12 reps"},
+      {name:"TRX Hamstring Curl",role:"hamstring",muscles:["hamstrings","glutes"],intensity:1,rx:"8–15 reps"},
+      {name:"TRX Y Raise",role:"upper",muscles:["shoulders","back"],intensity:1,rx:"8–12 reps"},
+      {name:"TRX T Raise",role:"upper",muscles:["shoulders","back"],intensity:1,rx:"8–12 reps"},
+      {name:"TRX Face Pull",role:"upper",muscles:["shoulders","back"],intensity:1,rx:"12–15 reps"},
+      {name:"Leg Curl Roller",role:"hamstring",muscles:["hamstrings"],intensity:1,rx:"10–15 reps"},
+      {name:"Ab Roller",role:"core",muscles:["core"],intensity:2,rx:"5–8 quality reps"},
+      {name:"Dead Bug",role:"core",muscles:["core"],intensity:1,rx:"8–10/side"},
+      {name:"Bird Dog",role:"core",muscles:["core"],intensity:1,rx:"8–10/side"},
+      {name:"Side Plank",role:"core",muscles:["core"],intensity:1,rx:"20–40 sec/side"},
+      {name:"Glute Bridge",role:"lower",muscles:["glutes","hamstrings"],intensity:1,rx:"12–20 reps"},
+      {name:"Split Squat Iso Hold",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"20–30 sec/side"},
+      {name:"Easy Suitcase Carry — 30 or 45 lb KB",role:"carry",muscles:["core","grip"],intensity:1,rx:"30–45 sec/side"},
+      {name:"Front-Rack March in Place — 30 lb KB",role:"carry",muscles:["core","shoulders"],intensity:1,rx:"30–45 sec/side"}
     ]
   },
   basement: {
     move: [
-      {name:"Incline Treadmill Walk", role:"cardio", muscles:["legs"], intensity:1, rx:"easy-moderate pace"},
-      {name:"Weighted-Vest Incline Walk", role:"cardio", muscles:["legs"], intensity:2, rx:"comfortable pace; no running"},
-      {name:"Goblet Squat — 20 or 30 lb KB", role:"lower", muscles:["quads","glutes"], intensity:1, rx:"12–15 reps"},
-      {name:"Dumbbell Romanian Deadlift", role:"hinge", muscles:["hamstrings","glutes"], intensity:1, rx:"12–15 reps"},
-      {name:"One-Arm Dumbbell Row", role:"pull", muscles:["back","biceps"], intensity:1, rx:"10–15/side"},
-      {name:"Dumbbell Floor Press", role:"push", muscles:["chest","triceps"], intensity:1, rx:"10–15 reps"},
-      {name:"Band Row", role:"pull", muscles:["back","biceps"], intensity:1, rx:"15–20 reps"},
-      {name:"Single-Leg Squat", role:"lower", muscles:["quads","glutes"], intensity:2, rx:"6–10/side, controlled"},
-      {name:"Leg Curl Roller", role:"hamstring", muscles:["hamstrings"], intensity:1, rx:"10–15 reps"},
-      {name:"Ab Roller", role:"core", muscles:["core"], intensity:2, rx:"5–10 reps"}
+      {name:"Easy Treadmill Walk",role:"cardio",muscles:["legs"],intensity:1,rx:"easy pace"},
+      {name:"Incline Treadmill Walk",role:"cardio",muscles:["legs"],intensity:1,rx:"easy-moderate incline"},
+      {name:"Weighted-Vest Incline Walk",role:"cardio",muscles:["legs"],intensity:2,rx:"comfortable pace; no running"},
+      {name:"Easy Treadmill Jog — no vest",role:"cardio",muscles:["legs"],intensity:1,rx:"conversational pace"},
+      {name:"Goblet Squat — 20 or 30 lb KB",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"12–15 reps"},
+      {name:"Single-Leg Squat",role:"lower",muscles:["quads","glutes"],intensity:2,rx:"6–10/side, controlled"},
+      {name:"Reverse Lunge",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"8–12/side"},
+      {name:"Dumbbell Romanian Deadlift",role:"hinge",muscles:["hamstrings","glutes"],intensity:1,rx:"12–15 reps"},
+      {name:"Kettlebell Deadlift — 45 or 80 lb",role:"hinge",muscles:["hamstrings","glutes"],intensity:2,rx:"10–15 reps"},
+      {name:"One-Arm Dumbbell Row",role:"pull",muscles:["back","biceps"],intensity:1,rx:"10–15/side"},
+      {name:"Band Row",role:"pull",muscles:["back","biceps"],intensity:1,rx:"15–20 reps"},
+      {name:"Band Face Pull",role:"upper",muscles:["shoulders","back"],intensity:1,rx:"12–20 reps"},
+      {name:"Dumbbell Floor Press",role:"push",muscles:["chest","triceps"],intensity:1,rx:"10–15 reps"},
+      {name:"Push-Up",role:"push",muscles:["chest","triceps"],intensity:1,rx:"8–20 reps"},
+      {name:"Leg Curl Roller",role:"hamstring",muscles:["hamstrings"],intensity:1,rx:"10–15 reps"},
+      {name:"Ab Roller",role:"core",muscles:["core"],intensity:2,rx:"5–10 reps"},
+      {name:"Dead Bug",role:"core",muscles:["core"],intensity:1,rx:"8–12/side"},
+      {name:"Kettlebell Suitcase Carry",role:"carry",muscles:["core","grip"],intensity:1,rx:"30–45 sec/side"},
+      {name:"Front-Rack March in Place",role:"carry",muscles:["core","shoulders"],intensity:1,rx:"30–45 sec/side"}
     ],
     condition: [
-      {name:"Weighted-Vest Incline Walk", role:"cardio", muscles:["legs"], intensity:2, rx:"steady moderate incline; no running"},
-      {name:"Treadmill Fast Intervals — no vest", role:"cardio", muscles:["legs"], intensity:2, rx:"30 sec fast / 60 sec easy"},
-      {name:"Kettlebell Swing — 30 or 45 lb", role:"hinge", muscles:["hamstrings","glutes"], intensity:2, rx:"15–20 reps"},
-      {name:"Kettlebell Suitcase Carry", role:"carry", muscles:["core","grip"], intensity:2, rx:"30–45 sec/side"},
-      {name:"Dumbbell Thruster — light", role:"full", muscles:["quads","shoulders"], intensity:2, rx:"8–12 reps"},
-      {name:"Band Row", role:"pull", muscles:["back","biceps"], intensity:1, rx:"15–20 reps"},
-      {name:"Reverse Lunge", role:"lower", muscles:["quads","glutes"], intensity:1, rx:"8–10/side"},
-      {name:"Ab Roller", role:"core", muscles:["core"], intensity:2, rx:"5–10 reps"}
+      {name:"Weighted-Vest Incline Walk",role:"cardio",muscles:["legs"],intensity:2,rx:"steady moderate incline; no running"},
+      {name:"Treadmill Hill Intervals — no vest",role:"cardio",muscles:["legs"],intensity:2,rx:"45 sec uphill / 75 sec easy"},
+      {name:"Treadmill Fast Intervals — no vest",role:"cardio",muscles:["legs"],intensity:2,rx:"30 sec fast / 60 sec easy"},
+      {name:"Treadmill Run/Walk Intervals — no vest",role:"cardio",muscles:["legs"],intensity:2,rx:"60 sec run / 60 sec walk"},
+      {name:"Treadmill Progression Walk/Jog — no vest",role:"cardio",muscles:["legs"],intensity:2,rx:"build pace gradually"},
+      {name:"Kettlebell Swing — 30 or 45 lb",role:"hinge",muscles:["hamstrings","glutes"],intensity:2,rx:"15–20 reps"},
+      {name:"Kettlebell Suitcase Carry",role:"carry",muscles:["core","grip"],intensity:2,rx:"30–45 sec/side"},
+      {name:"Front-Rack March in Place",role:"carry",muscles:["core","shoulders"],intensity:2,rx:"30–45 sec/side"},
+      {name:"Dumbbell Thruster — light",role:"full",muscles:["quads","shoulders"],intensity:2,rx:"8–12 reps"},
+      {name:"Band Row",role:"pull",muscles:["back","biceps"],intensity:1,rx:"15–20 reps"},
+      {name:"Push-Up",role:"push",muscles:["chest","triceps"],intensity:1,rx:"8–15 reps"},
+      {name:"Reverse Lunge",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"8–10/side"},
+      {name:"Mountain Climber",role:"core",muscles:["core"],intensity:2,rx:"30–40 sec"},
+      {name:"Ab Roller",role:"core",muscles:["core"],intensity:2,rx:"5–10 reps"}
     ],
     mobility: [
-      {name:"Easy Treadmill Walk", role:"cardio", muscles:["legs"], intensity:1, rx:"easy pace"},
-      {name:"90/90 Hip Switch", role:"mobility", muscles:["hips"], intensity:1, rx:"6–8/side"},
-      {name:"Band Pull-Apart", role:"upper", muscles:["shoulders","back"], intensity:1, rx:"15–20 reps"},
-      {name:"Band Face Pull", role:"upper", muscles:["shoulders","back"], intensity:1, rx:"12–20 reps"},
-      {name:"Leg Curl Roller", role:"hamstring", muscles:["hamstrings"], intensity:1, rx:"10–15 reps"},
-      {name:"Ab Roller", role:"core", muscles:["core"], intensity:2, rx:"5–8 reps"},
-      {name:"Dead Bug", role:"core", muscles:["core"], intensity:1, rx:"8–10/side"},
-      {name:"Single-Leg Squat — easy", role:"lower", muscles:["quads","glutes"], intensity:1, rx:"6–8/side"}
+      {name:"Easy Treadmill Walk",role:"cardio",muscles:["legs"],intensity:1,rx:"easy pace"},
+      {name:"Gentle Incline Treadmill Walk",role:"cardio",muscles:["legs"],intensity:1,rx:"easy pace and incline"},
+      {name:"90/90 Hip Switch",role:"mobility",muscles:["hips"],intensity:1,rx:"6–8/side"},
+      {name:"World's Greatest Stretch",role:"mobility",muscles:["hips","back"],intensity:1,rx:"4–6/side"},
+      {name:"Band Pull-Apart",role:"upper",muscles:["shoulders","back"],intensity:1,rx:"15–20 reps"},
+      {name:"Band Face Pull",role:"upper",muscles:["shoulders","back"],intensity:1,rx:"12–20 reps"},
+      {name:"Band External Rotation",role:"upper",muscles:["shoulders"],intensity:1,rx:"10–15/side"},
+      {name:"Leg Curl Roller",role:"hamstring",muscles:["hamstrings"],intensity:1,rx:"10–15 reps"},
+      {name:"Ab Roller",role:"core",muscles:["core"],intensity:2,rx:"5–8 reps"},
+      {name:"Dead Bug",role:"core",muscles:["core"],intensity:1,rx:"8–10/side"},
+      {name:"Bird Dog",role:"core",muscles:["core"],intensity:1,rx:"8–10/side"},
+      {name:"Side Plank",role:"core",muscles:["core"],intensity:1,rx:"20–40 sec/side"},
+      {name:"Single-Leg Squat — easy",role:"lower",muscles:["quads","glutes"],intensity:1,rx:"6–8/side"},
+      {name:"Glute Bridge",role:"lower",muscles:["glutes","hamstrings"],intensity:1,rx:"12–20 reps"},
+      {name:"Easy Suitcase Carry",role:"carry",muscles:["core","grip"],intensity:1,rx:"30–45 sec/side"}
     ]
   }
 };
@@ -124,7 +186,7 @@ function defaultState(){
     approvedPendingProgram: null,
     availableProgram: null,
     settings: {defaultRestSeconds:90},
-    homeGenerator: {location:"garage",duration:20,style:"move",generated:null},
+    homeGenerator: {location:"garage",duration:20,style:"move",generated:null,recentExercises:{garage:[],basement:[]}},
     lastModifiedAt: new Date().toISOString()
   };
 }
@@ -165,11 +227,15 @@ function migrateState(raw){
   s.substitutionUse = raw.substitutionUse || {};
   s.settings = {...s.settings,...(raw.settings || {})};
   s.homeGenerator = {...s.homeGenerator,...(raw.homeGenerator || {}),generated:null};
+  s.homeGenerator.recentExercises = {
+    garage:[...(raw.homeGenerator?.recentExercises?.garage || [])],
+    basement:[...(raw.homeGenerator?.recentExercises?.basement || [])]
+  };
   s.approvedPendingProgram = raw.approvedPendingProgram || null;
   s.availableProgram = raw.availableProgram || null;
   s.lastModifiedAt = raw.lastModifiedAt || new Date().toISOString();
 
-  // V3 is the already-approved next block. Activate it once when upgrading from V1/V2.
+  // V4 is the approved next block. Activate it once when upgrading from an earlier program version.
   if(Number(raw.activeProgramVersion || 0) >= ACTIVE_PROGRAM.version && raw.currentBlock?.version >= ACTIVE_PROGRAM.version){
     s.activeProgramVersion = raw.activeProgramVersion;
     s.currentBlock = raw.currentBlock;
@@ -215,7 +281,7 @@ window.getWorkoutState = () => structuredClone(state);
 window.restoreStateFromCloud = function(remoteState){
   if(!remoteState) return;
   const restored = migrateState(remoteState);
-  // If a cloud backup predates V3, keep history but activate the approved V3 block.
+  // If a cloud backup predates V4, keep history but activate the approved V4 block.
   state = restored;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   render();
@@ -622,11 +688,17 @@ function shuffle(arr){ const c=[...arr]; for(let i=c.length-1;i>0;i--){const j=M
 function nextGymMuscles(){
   const w=workoutById(state.nextWorkoutId); return new Set((w?.exercises||[]).flatMap(e=>e.muscles||[]));
 }
-function chooseHomeExercise(pool,role,used,nextMuscles){
+function chooseHomeExercise(pool,role,used,nextMuscles,recentNames=[]){
   let candidates=pool.filter(e=>e.role===role && !used.has(e.name));
   if(!candidates.length) candidates=pool.filter(e=>!used.has(e.name));
   if(!candidates.length) return null;
-  const ranked=candidates.map(e=>({e,score:Math.random() - ((e.muscles||[]).some(m=>nextMuscles.has(m)) ? .12*Number(e.intensity||1) : 0)})).sort((a,b)=>b.score-a.score);
+  const recent=new Set(recentNames || []);
+  const ranked=candidates.map(e=>({
+    e,
+    score:Math.random()
+      - ((e.muscles||[]).some(m=>nextMuscles.has(m)) ? .12*Number(e.intensity||1) : 0)
+      - (recent.has(e.name) ? .85 : 0)
+  })).sort((a,b)=>b.score-a.score);
   used.add(ranked[0].e.name); return ranked[0].e;
 }
 function homeRounds(style,duration){
@@ -647,20 +719,24 @@ function buildHomeWorkout(){
   const pool=HOME_POOLS[g.location][g.style];
   const nextMuscles=nextGymMuscles();
   const used=new Set();
+  const recent=g.recentExercises?.[g.location] || [];
   const count=g.duration===10?3:g.duration===20?4:g.duration===30?5:6;
   let roles;
-  if(g.style==="move") roles=["cardio","lower","pull","push","carry","core","hinge"];
-  else if(g.style==="condition") roles=["cardio","hinge","carry","upper","core","pull","lower"];
+  if(g.style==="move") roles=["cardio","lower","pull","push","carry","core","hinge","upper"];
+  else if(g.style==="condition") roles=["cardio","hinge","carry","full","core","pull","lower","push"];
   else roles=["cardio","mobility","core","hamstring","upper","lower","carry"];
   const chosen=[];
   if(g.location==="basement" && g.style==="condition"){
-    const tread=shuffle(pool.filter(e=>e.role==="cardio"))[0]; if(tread){chosen.push(tread);used.add(tread.name);}
+    const treadmill=shuffle(pool.filter(e=>e.role==="cardio" && !recent.includes(e.name)))[0] || shuffle(pool.filter(e=>e.role==="cardio"))[0];
+    if(treadmill){chosen.push(treadmill);used.add(treadmill.name);}
   }
   for(const role of roles){
     if(chosen.length>=count) break;
-    const e=chooseHomeExercise(pool,role,used,nextMuscles); if(e) chosen.push(e);
+    const e=chooseHomeExercise(pool,role,used,nextMuscles,recent); if(e) chosen.push(e);
   }
-  while(chosen.length<count){ const e=chooseHomeExercise(pool,"any",used,nextMuscles); if(!e) break; chosen.push(e); }
+  while(chosen.length<count){ const e=chooseHomeExercise(pool,"any",used,nextMuscles,recent); if(!e) break; chosen.push(e); }
+  g.recentExercises ||= {garage:[],basement:[]};
+  g.recentExercises[g.location]=[...new Set([...chosen.map(e=>e.name),...recent])].slice(0,14);
   g.generated={
     id:Date.now(), createdAt:new Date().toISOString(), location:g.location, duration:g.duration, style:g.style,
     exercises:chosen.map(e=>({name:e.name,prescription:homePrescription(e,g.style,g.duration)})),
@@ -715,7 +791,7 @@ function nav(v){ view=v; modal=null; render(); updateTimerDisplays(); }
 function homeView(){
   const next=state.nextWorkoutId?workoutById(state.nextWorkoutId):null;
   const last=[...state.completedWorkouts].sort((a,b)=>new Date(b.finishedAt||b.date)-new Date(a.finishedAt||a.date))[0];
-  return `<div class="topbar"><div class="toprow"><div><h1>Workout Tracker</h1><div class="subtle">${escapeHtml(state.currentBlock.name)}</div></div><span class="pill">V3</span></div></div>
+  return `<div class="topbar"><div class="toprow"><div><h1>Workout Tracker</h1><div class="subtle">${escapeHtml(state.currentBlock.name)}</div></div><span class="pill">V4</span></div></div>
   <main class="content">
     ${state.activeWorkout?`<div class="card"><div class="eyebrow">In progress</div><h2>${escapeHtml(state.activeWorkout.workoutName)}</h2><button class="btn" onclick="nav('workout')">Resume workout</button></div>`:""}
     ${state.availableProgram?`<div class="card update-card"><div class="eyebrow">New program available</div><h3>${escapeHtml(state.availableProgram.name)}</h3><button class="btn" onclick="reviewRemoteProgram()">Review program</button></div>`:""}
@@ -778,7 +854,7 @@ function homeGeneratorView(){
       <div class="eyebrow" style="margin-top:16px">Time</div><div class="segmented four">${[10,20,30,45].map(m=>`<button class="${g.duration===m?'selected':''}" onclick="setHomeDuration(${m})">${m} min</button>`).join("")}</div>
       <div class="eyebrow" style="margin-top:16px">Workout type</div><div class="segmented three">${[["move","Move"],["condition","Condition"],["mobility","Mobility + Core"]].map(([v,l])=>`<button class="${g.style===v?'selected':''}" onclick="setHomeStyle('${v}')">${l}</button>`).join("")}</div>
     </div>
-    <div class="card"><h3>${g.location==='garage'?'Garage':'Basement'} equipment</h3><div class="inventory-list">${inventory.map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join("")}</div>${g.location==='basement'?`<div class="note"><strong>Basement rule:</strong> treadmill work is emphasized for conditioning. Weighted-vest work is walking only; faster intervals are done without the vest. No jump rope.</div>`:`<div class="note"><strong>Garage rule:</strong> TRX and jump ropes are available here. Sessions stay movement/conditioning focused rather than trying to duplicate heavy gym work.</div>`}</div>
+    <div class="card"><h3>${g.location==='garage'?'Garage':'Basement'} equipment</h3><div class="inventory-list">${inventory.map(x=>`<span class="pill">${escapeHtml(x)}</span>`).join("")}</div>${g.location==='basement'?`<div class="note"><strong>Basement rule:</strong> treadmill work is emphasized for conditioning. Weighted-vest work is walking only; faster intervals are done without the vest. No jump rope. Recently generated movements are deprioritized for better variety.</div>`:`<div class="note"><strong>Garage rule:</strong> TRX and jump ropes are available here. Sessions stay movement/conditioning focused rather than trying to duplicate heavy gym work. Recently generated movements are deprioritized for better variety.</div>`}</div>
     <button class="btn" style="width:100%;padding:16px" onclick="buildHomeWorkout()">${generated?'Generate another workout':'Generate workout'}</button>
     ${generated?`<div class="card" style="margin-top:12px"><div class="row between"><div><div class="eyebrow">${generated.location==='garage'?'Garage':'Basement'} · ${generated.duration} min · ${generated.style==='mobility'?'Mobility + Core':generated.style}</div><h2 style="margin-top:5px">Today's one-off workout</h2></div><button class="btn ghost small" onclick="clearGeneratedHomeWorkout()">Clear</button></div><div class="home-plan">${generated.exercises.map((ex,i)=>`<div class="home-exercise"><div class="home-num">${i+1}</div><div><strong>${escapeHtml(ex.name)}</strong><div class="subtle">${escapeHtml(ex.prescription)}</div></div></div>`).join("")}</div><div class="note">${escapeHtml(generated.note)}</div><div class="subtle" style="margin-top:10px">This session is disposable and will not be added to workout history.</div></div>`:""}
   </main>`;
@@ -861,7 +937,7 @@ function render(){
   if(modal?.type==="history") setTimeout(()=>drawProgressChart(modal.exId),0);
 }
 
-save("v3-migration",false);
+save("v4-migration",false);
 render();
 checkRemoteProgram();
 window.addEventListener("cloud-status",()=>{ if(view==="settings") render(); });
